@@ -1,1 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAWA CINEMA LAB | Professional AI Director</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-pink: #ff00ff; --deep-black: #080808; --glass-white: rgba(255, 255, 255, 0.05); }
+        body { background-color: var(--deep-black); color: #f0f0f0; font-family: 'Montserrat', sans-serif; background-image: radial-gradient(circle at top right, rgba(255, 0, 255, 0.05), transparent); }
+        .hawa-header { font-family: 'Orbitron', sans-serif; letter-spacing: 0.3em; background: linear-gradient(to bottom, #ffffff 0%, #ff00ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 10px 20px rgba(255, 0, 255, 0.2); }
+        .neon-border { border: 1px solid rgba(255, 0, 255, 0.3); box-shadow: 0 0 20px rgba(255, 0, 255, 0.1); transition: 0.4s ease; }
+        .neon-border:hover { border-color: var(--neon-pink); box-shadow: 0 0 30px rgba(255, 0, 255, 0.3); }
+        .glass-card { background: var(--glass-white); backdrop-filter: blur(15px); border-radius: 24px; }
+        .label-style { color: var(--neon-pink); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem; display: block; }
+        input, textarea, select { background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #fff !important; padding: 12px 16px !important; font-size: 0.9rem !important; transition: 0.3s !important; width: 100%; border-radius: 12px; }
+        .btn-main { background: linear-gradient(45deg, #ff00ff, #800080); color: white; font-family: 'Orbitron', sans-serif; font-weight: bold; letter-spacing: 2px; transition: 0.5s; cursor: pointer; }
+        .btn-main:hover { box-shadow: 0 0 40px #ff00ff; transform: scale(1.02); }
+        th { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; letter-spacing: 1.5px; color: #ff00ff; padding: 20px !important; }
+        td { padding: 20px !important; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .director-note { font-style: italic; font-size: 0.8rem; color: #aaa; border-left: 2px solid #ff00ff; padding-left: 10px; }
+    </style>
+</head>
+<body class="p-4 md:p-12">
+
+    <header class="text-center mb-16">
+        <p class="text-[11px] tracking-[0.5em] text-white/80 mb-2 uppercase font-bold italic">By Digital Hawa</p>
+        <h1 class="text-5xl md:text-7xl hawa-header font-black uppercase">HAWA CINEMA LAB</h1>
+        <div class="h-1 w-32 bg-pink-600 mx-auto mt-4 rounded-full shadow-[0_0_15px_#ff00ff]"></div>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
+        
+        <section class="lg:col-span-4 space-y-8 glass-card p-8 neon-border">
+            <h2 class="text-2xl font-bold tracking-widest text-white mb-6 uppercase">Studio Command</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <span class="label-style">1. Ide Cerita</span>
+                    <textarea id="storyInput" rows="4" placeholder="Masukkan narasi ceritamu..."></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <span class="label-style">2. Karakter Utama</span>
+                        <input id="mainCharInput" type="text" placeholder="Deskripsi tokoh utama...">
+                    </div>
+                    <div>
+                        <span class="label-style">3. Karakter Pendukung</span>
+                        <input id="sideCharInput" type="text" placeholder="Tokoh pendukung (opsional)...">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <span class="label-style">4. Durasi</span>
+                        <select id="durationInput">
+                            <option value="Teaser 30s">Teaser 30s</option>
+                            <option value="Short Movie 1m">Short Movie 1m</option>
+                            <option value="Cinematic 2m">Cinematic 2m</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span class="label-style">5. Style Visual</span>
+                        <select id="styleInput">
+                            <option value="Hyper-realistic, cinematic 8k, photorealistic">Hyper-Realistic</option>
+                            <option value="3D Pixar style, cute render, vibrant">3D Pixar</option>
+                            <option value="Claymation style, stop motion, clay texture">Clay</option>
+                            <option value="Studio Ghibli anime style, hand-drawn esthetic">Anime Ghibli</option>
+                            <option value="Cyberpunk, neon lighting, futuristic city">Cyberpunk</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="produksiScene()" class="w-full py-5 rounded-2xl btn-main uppercase">Mulai Produksi 🎬</button>
+            </div>
+        </section>
+
+        <section class="lg:col-span-8">
+            <div class="glass-card overflow-hidden neon-border">
+                <table class="w-full text-left">
+                    <thead class="bg-black/50">
+                        <tr>
+                            <th class="text-center">SCENE</th>
+                            <th>PREVIEW</th>
+                            <th>MASTER PROMPT & NOTES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productionTable">
+                        <tr>
+                            <td colspan="3" class="text-center py-20 text-gray-500 italic">Belum ada produksi. Masukkan ide untuk memulai.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mt-24 mb-10 text-center px-4">
+        <div class="h-[1px] w-full bg-gradient-to-r from-transparent via-pink-500/20 to-transparent mb-8"></div>
+        <div class="space-y-3">
+            <p class="text-[10px] md:text-[12px] text-white/90 tracking-[0.4em] uppercase font-black">
+                © 2026 HAWA CINEMA LAB. ALL RIGHTS RESERVED.
+            </p>
+            <p class="text-[9px] md:text-[10px] text-pink-500/80 tracking-[0.6em] uppercase font-bold italic">
+                Powered by Digital Hawa
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function produksiScene() {
+            const ide = document.getElementById('storyInput').value;
+            const tokohUtama = document.getElementById('mainCharInput').value;
+            const tokohSampingan = document.getElementById('sideCharInput').value;
+            const durasi = document.getElementById('durationInput').value;
+            const style = document.getElementById('styleInput').value;
+            const table = document.getElementById('productionTable');
+
+            if (!ide || !tokohUtama) {
+                alert("Sutradara, isi Ide dan Tokoh Utama dulu!");
+                return;
+            }
+
+            // Animasi Loading
+            table.innerHTML = `<tr><td colspan="3" class="text-center py-20 animate-pulse text-pink-500 font-bold tracking-widest uppercase">Sedang Merender Produksi...</td></tr>`;
+
+            // Merakit Prompt
+            const finalPrompt = `Cinematic shot, style ${style}, starring ${tokohUtama}${tokohSampingan ? ' and ' + tokohSampingan : ''}. Scene description: ${ide}. Visual for ${durasi}, 8k resolution, highly detailed.`;
+            
+            const seed = Math.floor(Math.random() * 9999);
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?width=1080&height=607&seed=${seed}&nologo=true`;
+
+            // Menampilkan hasil di tabel
+            setTimeout(() => {
+                table.innerHTML = `
+                    <tr>
+                        <td class="text-center font-bold text-2xl text-white opacity-20 italic">01</td>
+                        <td class="w-64">
+                            <img src="${imageUrl}" class="rounded-xl border border-white/10 mb-2 w-full shadow-lg transition hover:scale-105 duration-500">
+                            <span class="text-[9px] text-pink-400 font-bold uppercase tracking-tighter">[MASTER] ${durasi} READY</span>
+                        </td>
+                        <td>
+                            <div class="p-4 bg-black/40 rounded-xl border border-white/5 mb-4">
+                                <p class="text-[10px] text-pink-500 font-bold uppercase mb-2 tracking-widest underline">Prompt Master</p>
+                                <p class="text-xs text-gray-200 leading-relaxed italic">\`${finalPrompt}\`</p>
+                            </div>
+                            <div class="director-note text-gray-400">
+                                <span class="text-white font-bold">Catatan Digital Hawa:</span> Menggunakan gaya ${style.split(',')[0]} untuk durasi ${durasi}.
+                            </div>
+                            <div class="mt-4">
+                                <button onclick="navigator.clipboard.writeText('${finalPrompt}')" class="px-4 py-2 bg-pink-600/20 hover:bg-pink-600 text-pink-500 hover:text-white rounded-lg text-[10px] uppercase font-bold transition border border-pink-500/30">Salin Prompt</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
 
