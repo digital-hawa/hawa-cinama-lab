@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HAWA CINEMA LAB | Production Bible Generator</title>
     
-    <link rel="icon" type="image/jpg" href="gemini-image-2_Cinematic_poster_for_HAWA_CINEMA_LAB_ultra-detailed_rendering_realistic_style_8k-1.jpg">
+    <link rel="icon" type="image/png" href="logo-anda.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
@@ -17,11 +17,12 @@
         .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border-radius: 20px; }
         .label-style { color: var(--neon-pink); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.4rem; display: block; }
         input, textarea, select { background: rgba(0,0,0,0.5) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: #fff !important; padding: 10px !important; width: 100%; border-radius: 8px; font-size: 0.8rem; }
-        .btn-prod { background: linear-gradient(45deg, #ff00ff, #800080); font-family: 'Orbitron', sans-serif; transition: 0.3s; cursor: pointer; border-radius: 12px; }
+        .btn-prod { background: linear-gradient(45deg, #ff00ff, #800080); font-family: 'Orbitron', sans-serif; transition: 0.3s; cursor: pointer; border-radius: 12px; line-height: 1.2; }
         .btn-prod:hover { box-shadow: 0 0 25px #ff00ff; transform: translateY(-2px); }
         th { font-family: 'Orbitron', sans-serif; font-size: 0.55rem; color: #ff00ff; padding: 15px; border-bottom: 1px solid #ff00ff44; text-transform: uppercase; }
         td { font-size: 0.75rem; padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: top; }
-        .prompt-box { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 6px; border-left: 3px solid #ff00ff; font-style: italic; color: #ccc; line-height: 1.6; font-size: 0.7rem; }
+        .prompt-box { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 6px; border-left: 3px solid #00ffcc; font-style: italic; color: #00ffcc; line-height: 1.6; font-size: 0.7rem; border: 1px solid rgba(0,255,204,0.1); }
+        .teaser-card { background: linear-gradient(135deg, rgba(255,0,255,0.05) 0%, rgba(0,0,0,0.8) 100%); border: 1px dashed #ff00ff; padding: 20px; border-radius: 15px; margin-bottom: 20px; display:none; }
         .seed-badge { background: #ff00ff; color: black; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-size: 10px; }
     </style>
 </head>
@@ -59,12 +60,13 @@
                                 <option value="6">Teaser 30s (~6 Scenes)</option>
                                 <option value="12">Short Movie 1m (~12 Scenes)</option>
                                 <option value="20">Cinematic 2m (~20 Scenes)</option>
+                                <option value="40">Feature 5m (~40 Scenes)</option>
                             </select>
                         </div>
                         <div>
                             <span class="label-style">5. Visual Style</span>
                             <select id="styleInput">
-                                <option value="Hyper-Realistic, cinematic 8k">Hyper-Realistic</option>
+                                <option value="Hyper-Realistic, cinematic 8k, photorealistic">Hyper-Realistic</option>
                                 <option value="3D Pixar style, vibrant render">3D Pixar</option>
                                 <option value="3D Cartoon style, bold colors">3D Cartoon</option>
                                 <option value="Claymation style, stop motion texture">Claymation</option>
@@ -72,9 +74,17 @@
                             </select>
                         </div>
                     </div>
-                    <button onclick="generateCompleteBible()" class="btn-prod w-full py-4 text-white font-bold uppercase tracking-widest mt-2">Generate Production Bible 🎬</button>
+                    <button onclick="generateCompleteBible()" class="btn-prod w-full py-3 text-white font-bold uppercase tracking-widest mt-2 text-xs">
+                        GENERATE<br>CINEMATIC SCENES 🎬
+                    </button>
                 </div>
             </div>
+        </section>
+
+        <section id="teaserSection" class="teaser-card">
+            <span class="label-style" style="color: #00ffcc;">🔥 MOVIE TEASER PROMO PROMPT (FOR AI VIDEO)</span>
+            <div id="teaserPrompt" class="prompt-box" style="background: rgba(0, 255, 204, 0.05); color: #fff;"></div>
+            <p class="text-[9px] mt-2 text-gray-400 italic font-bold uppercase tracking-wider">*Gunakan prompt ini di Veo atau Leonardo untuk teaser 10 detik.</p>
         </section>
 
         <section class="glass-card overflow-x-auto neon-border">
@@ -83,7 +93,7 @@
                     <tr class="bg-black/40 text-center">
                         <th width="100">SCENE</th>
                         <th width="180">CHARACTER FOCUS</th>
-                        <th>MASTER PROMPT (CONSISTENCY LOCKED)</th>
+                        <th>MASTER PROMPT (ENGLISH - FOR AI VIDEO)</th>
                         <th width="200">DIALOGUE / VO</th>
                         <th width="200">DIRECTOR'S NOTE</th>
                         <th width="180">AUDIO / MUSIC</th>
@@ -106,54 +116,65 @@
         function generateCompleteBible() {
             const story = document.getElementById('storyInput').value;
             let mainName = document.getElementById('mainCharInput').value || "THE PROTAGONIST";
-            let sideName = document.getElementById('sideCharInput').value || "THE CROWD";
+            let sideName = document.getElementById('sideCharInput').value || "THE SIDE CHARACTER";
             const style = document.getElementById('styleInput').value;
             const sceneCount = parseInt(document.getElementById('durationInput').value);
             const tbody = document.getElementById('bibleBody');
+            const teaserBox = document.getElementById('teaserSection');
+            const teaserText = document.getElementById('teaserPrompt');
 
-            if(!story) return alert("Sutradara, isi ide ceritanya!");
+            if(!story) return alert("Sutradara, isi ide filmnya!");
 
-            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-20 animate-pulse text-pink-500 font-bold uppercase">Synthesizing All Columns...</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-20 animate-pulse text-pink-500 font-bold uppercase">Synthesizing Cinematic Data...</td></tr>`;
+            teaserBox.style.display = "none";
 
-            const mainSeed = "#MAIN_" + Math.floor(Math.random() * 9999);
-            const angles = ["Cinematic 85mm Close-up", "Wide Angle Drone Shot", "Dolly Zoom Cinematic", "Low-angle heroic shot", "Over-the-shoulder shot"];
+            const mainSeed = "#HAWA_SEED_" + Math.floor(Math.random() * 9999);
+            const angles = ["Extreme Close-up", "Wide Shot", "Dolly Zoom", "Low-angle heroic shot", "Tracking shot"];
             let html = "";
 
+            // Generate Teaser Prompt
+            teaserText.innerHTML = `[Teaser Style: ${style}] [Epic montage of ${mainName.toUpperCase()} and ${sideName.toUpperCase()} in ${story}] [High energy, cinematic lighting, 8k, Master Seed: ${mainSeed}]`;
+
             for(let i = 1; i <= sceneCount; i++) {
-                let focus, action, note, dialogue, audio;
+                let focusLabel, actionEN, note, dialogue, audio;
                 const rand = Math.random();
 
                 if (rand < 0.4) {
-                    focus = `${mainName.toUpperCase()} [SOLO]`;
-                    action = `${mainName} alone in the world of ${story}. Seed: ${mainSeed}.`;
+                    focusLabel = mainName.toUpperCase();
+                    actionEN = `A cinematic focus on ${mainName} in a scene about ${story}. Visual Seed: ${mainSeed}.`;
                     dialogue = `"Ini saatnya membuktikan segalanya."`;
-                    note = "Membangun emosi personal karakter utama.";
-                    audio = "Atmospheric synth, solo piano.";
+                    note = `Pastikan visual karakter ${mainName} konsisten.`;
+                    audio = "Melancholic orchestral strings.";
                 } else if (rand < 0.8) {
-                    focus = `${mainName.toUpperCase()} & ${sideName.toUpperCase()}`;
-                    action = `${mainName} interacting with ${sideName} in ${story}. Seed: ${mainSeed}.`;
-                    dialogue = `(Suara latar belakang dari ${sideName})`;
-                    note = "Interaksi sosial memperluas dunia cerita.";
-                    audio = "Busy street ambiance, rhythmic music.";
+                    focusLabel = `${mainName.toUpperCase()} & ${sideName.toUpperCase()}`;
+                    actionEN = `${mainName} interacting with ${sideName} in the world of ${story}. Visual Seed: ${mainSeed}.`;
+                    dialogue = `(Interaksi antara ${mainName} dan ${sideName})`;
+                    note = `Fokus pada dinamika akting antara ${mainName} dan ${sideName}.`;
+                    audio = "Rhythmic percussion, ambient noise.";
                 } else {
-                    focus = "ATMOSPHERE";
-                    action = `Cinematic wide view of the environment: ${story}. High detail.`;
+                    focusLabel = "ENVIRONMENT";
+                    actionEN = `Cinematic wide view of the world of ${story} featuring ${mainName} in the distance. 8k resolution.`;
                     dialogue = `(Hening...)`;
-                    note = "Establishing shot untuk mood lokasi.";
-                    audio = "Deep cinematic soundscape.";
+                    note = "Establishing shot untuk membangun mood.";
+                    audio = "Deep cinematic bass drone.";
                 }
+
+                const finalPrompt = `[Style: ${style}] [Angle: ${angles[i % 5]}] [Scene: ${actionEN}] [Quality: High detail, consistent character]`;
 
                 html += `
                     <tr>
                         <td class="text-center font-bold text-pink-500 uppercase text-[11px]">SCENE ${i}</td>
-                        <td class="font-bold text-white uppercase text-[11px]">${focus}<br><span class="seed-badge">${mainSeed}</span></td>
-                        <td><div class="prompt-box">${style}, ${angles[i % 5]}, ${action} 8k cinematic.</div></td>
+                        <td class="font-bold text-white uppercase text-[11px]">${focusLabel}<br><span class="seed-badge">${mainSeed}</span></td>
+                        <td><div class="prompt-box">${finalPrompt}</div></td>
                         <td class="italic text-pink-200">"${dialogue}"</td>
                         <td class="text-gray-400 border-l border-pink-500/20 pl-4 italic text-[11px]">${note}</td>
                         <td class="text-blue-300 font-medium text-[10px]">SFX: ${audio}</td>
                     </tr>`;
             }
-            setTimeout(() => { tbody.innerHTML = html; }, 1500);
+            setTimeout(() => { 
+                tbody.innerHTML = html; 
+                teaserBox.style.display = "block";
+            }, 1200);
         }
     </script>
 </body>
