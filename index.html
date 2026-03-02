@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAWA CINEMA LAB | Professional AI Director</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff00ff;
+            --deep-black: #080808;
+            --glass-white: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: var(--deep-black);
+            color: #f0f0f0;
+            font-family: 'Montserrat', sans-serif;
+            background-image: radial-gradient(circle at top right, rgba(255, 0, 255, 0.05), transparent);
+        }
+
+        .hawa-header {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.3em;
+            background: linear-gradient(to bottom, #ffffff 0%, #ff00ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 20px rgba(255, 0, 255, 0.2);
+        }
+
+        .neon-border {
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.1);
+            transition: 0.4s ease;
+        }
+
+        .neon-border:hover {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+        }
+
+        .glass-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+        }
+
+        .label-style {
+            color: var(--neon-pink);
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* Styling Input agar Estetik */
+        input, textarea, select {
+            background: rgba(0, 0, 0, 0.4) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: #fff !important;
+            padding: 12px 16px !important;
+            font-size: 0.9rem !important;
+            transition: 0.3s !important;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--neon-pink) !important;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.2) !important;
+            outline: none !important;
+        }
+
+        .btn-main {
+            background: linear-gradient(45deg, #ff00ff, #800080);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            letter-spacing: 2px;
+            transition: 0.5s;
+        }
+
+        .btn-main:hover {
+            box-shadow: 0 0 40px #ff00ff;
+            transform: scale(1.02);
+        }
+
+        /* Table Styling */
+        th {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            color: #ff00ff;
+            padding: 20px !important;
+        }
+        
+        td { padding: 20px !important; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+
+        .director-note {
+            font-style: italic;
+            font-size: 0.8rem;
+            color: #aaa;
+            border-left: 2px solid #ff00ff;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-12">
+
+    <header class="text-center mb-16">
+        <p class="text-[10px] tracking-[0.5em] text-gray-400 mb-2 uppercase italic">By Digital Hawa</p>
+        <h1 class="text-5xl md:text-7xl hawa-header font-black uppercase">HAWA CINEMA LAB</h1>
+        <div class="h-1 w-32 bg-magenta-500 mx-auto mt-4 rounded-full shadow-[0_0_15px_#ff00ff]"></div>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
+        
+        <section class="lg:col-span-4 space-y-8 glass-card p-8 neon-border">
+            <h2 class="text-2xl neon-text mb-6">STUDIO COMMAND</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <span class="label-style">1. Ide Cerita</span>
+                    <textarea id="story" class="w-full rounded-xl" rows="5" placeholder="Masukkan narasi ceritamu..."></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <span class="label-style">2. Karakter Utama</span>
+                        <input id="mainChar" type="text" class="w-full rounded-xl" placeholder="Deskripsi detail tokoh...">
+                    </div>
+                    <div>
+                        <span class="label-style">3. Karakter Pendukung</span>
+                        <input id="sideChar" type="text" class="w-full rounded-xl" placeholder="Opsional...">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <span class="label-style">4. Durasi</span>
+                        <select class="w-full rounded-xl">
+                            <option>Teaser 30s</option>
+                            <option>Short Movie 1m</option>
+                            <option>Cinematic 2m</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span class="label-style">5. Style Visual</span>
+                        <select class="w-full rounded-xl">
+                            <option>Hyper-Realistic</option>
+                            <option>3D Pixar</option>
+                            <option>Anime Ghibli</option>
+                            <option>Cyberpunk</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="w-full py-5 rounded-2xl btn-main">Mulai Produksi 🎬</button>
+            </div>
+        </section>
+
+        <section class="lg:col-span-8">
+            <div class="glass-card overflow-hidden neon-border">
+                <table class="w-full">
+                    <thead class="bg-black/50">
+                        <tr>
+                            <th>SCENE</th>
+                            <th>PREVIEW</th>
+                            <th>MASTER PROMPT & NOTES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center font-bold text-2xl text-white opacity-20 italic">01</td>
+                            <td class="w-64">
+                                <img src="https://pollinations.ai/p/cinematic-woman-cyberpunk-neon?width=400&height=225&seed=1" class="rounded-xl border border-white/10 mb-2">
+                                <span class="text-[10px] text-magenta-400 font-bold uppercase tracking-tighter">[MAIN] FOCUS ADHAWA</span>
+                            </td>
+                            <td>
+                                <p class="text-xs text-gray-300 leading-relaxed mb-4">
+                                    `A cinematic shot, hyper-realistic, double exposure of Hawa's silhouette with a glowing futuristic city inside her body. Neon magenta lights, anamorphic lens flare, 8k.`
+                                </p>
+                                <div class="director-note">
+                                    Director's Note: Pencahayaan sidelighting digunakan untuk menambah kesan misterius pada karakter utama.
+                                </div>
+                                <div class="mt-4 flex gap-2">
+                                    <button class="px-3 py-1 bg-white/10 hover:bg-magenta-600 rounded text-[10px] uppercase font-bold transition">Copy Prompt</button>
+                                    <button class="px-3 py-1 bg-white/10 hover:bg-blue-600 rounded text-[10px] uppercase font-bold transition">Play VO</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-6 flex justify-end gap-4">
+                 <button class="px-6 py-3 border border-white/20 rounded-full text-xs uppercase tracking-widest hover:bg-white hover:text-black transition">Download Script PDF</button>
+                 <button class="px-6 py-3 border border-magenta-500/50 rounded-full text-xs uppercase tracking-widest text-magenta-400 hover:bg-magenta-500 hover:text-white transition">AI Settings</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mt-32 mb-10 text-center">
+        <div class="h-[1px] w-full bg-gradient-to-r from-transparent via-gray-800 to-transparent mb-8"></div>
+        <p class="text-[10px] text-gray-600 tracking-[0.8em] uppercase font-light">Powered by Digital Hawa</p>
+    </footer>
+
+</body>
+</html>
